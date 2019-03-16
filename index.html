@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>🖊 Just Text</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+    }
+    #info {
+      z-index: 2;
+      position: absolute;
+      top: 5px;
+      right: 15px;
+      font-size: 32px;
+      cursor: pointer;
+    }
+    #info-box {
+      z-index: 3;
+      position: absolute;
+      max-width: 400px;
+      display: none;
+      top: 20%;
+      left: calc(100%/2 - 210px);
+      padding: 20px;
+      font-size: 16px;
+      text-align: center;
+    }
+    #info-box-close {
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 3px;
+    }
+    #note {
+      z-index: 1;
+      padding: 30px;
+      height: calc(100vh - 60px);
+      background: #f0f0f0;
+      font-size: 18px;
+      color: #333333;
+      overflow: auto;
+      white-space: pre-wrap;
+      tab-size: 4;
+      -moz-tab-size: 4;
+    }
+  </style>
+</head>
+<body>
+  <div id="info">☯</div>
+  <div id="info-box">
+    <p><strong>just-text</strong></p>
+    <p>a simple text editor that saves its state in your browser's local storage</p>
+    <p><a href="https://github.com/janstuemmel/just-text" target="_blank">github.com/janstuemmel/just-text</a></p>
+    <p>🖊</p>
+    <div id="info-box-close">close</div>
+  </div>
+  <div id="note" contenteditable />
+  <script type="text/javascript">
+    (function() {
+      var note = document.getElementById('note')
+      var info = document.getElementById('info')
+      var infoBox = document.getElementById('info-box')
+      var infoBoxClose = document.getElementById('info-box-close')
+
+      function onChange(event) {
+        localStorage.setItem('note', note.innerHTML)
+      }
+
+      function toggleInfoBox() {
+        var visible = infoBox.style.display === 'inherit'
+        note.style.filter = visible ? 'blur(0px)' : 'blur(4px)'
+        infoBox.style.display = visible ? 'none' : 'inherit'
+      }
+
+      // note
+      note.innerHTML = localStorage.getItem('note') || '# Hello World'
+      var evts = [ 'copy', 'cut', 'paste', 'keyup', 'mouseup', 'blur' ]
+      evts.forEach(function(evt) {
+        note.addEventListener(evt, onChange)
+      })
+
+      // tabs
+      note.addEventListener('keydown', function(evt) {
+        if(evt.keyCode === 9) {
+          evt.preventDefault()
+          document.execCommand('insertHTML', false, '&#009')
+        }
+      })
+      // info
+      info.addEventListener('click', toggleInfoBox)
+      infoBoxClose.addEventListener('click', toggleInfoBox)
+    })()
+  </script>
+</body>
+</html>

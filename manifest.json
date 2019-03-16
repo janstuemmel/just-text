@@ -1,0 +1,15 @@
+{
+  "name": "Just Text",
+  "short_name": "Just Text",
+  "icons": [
+    {
+      "src": "app.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f0f0",
+  "theme_color": "#000000"
+}
